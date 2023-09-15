@@ -1,10 +1,16 @@
 const express = require('express')
 const app = express()
 const path = require('path')
-
+const {logger} =  require('./middleware/logger')
+const errorHandler =  require('./middleware/errorHandler')
+const cookieParser = require('cookie-parser')// for MongoDB
 const PORT = process.env.PORT || 3500
 
-app.listen(PORT, ()=> console.group(`Server running on port ${PORT}`))
+
+//middleware
+app.use(logger)
+app.use(express.json())
+app.use(cookieParser())
 
 //Telling express to look for static (.css/ images, etc) files in the 'public' folder
 app.use('/', express.static(path.join(__dirname, '/public')))
@@ -18,3 +24,6 @@ app.all('*', (req, res)=>{
         res.json({message:'404 Not Found'})
     }else {res.type('txt').send('404 Not Found')}
 })
+app.use(errorHandler)
+
+app.listen(PORT, ()=> console.group(`Server running on port ${PORT}`))
