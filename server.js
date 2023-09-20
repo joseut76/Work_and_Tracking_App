@@ -22,7 +22,8 @@ app.use(cookieParser())
 
 //Telling express to look for static (.css/ images, etc) files in the 'public' folder
 app.use('/', express.static(path.join(__dirname, '/public')))
-app.use('/', require('./routes/root'))
+app.use('/', require('./routes/root'))//route to display index page in localhost:3500
+app.use('/users', require('./routes/userRoutes'))
 
 app.all('*', (req, res)=>{
     res.status(404)
